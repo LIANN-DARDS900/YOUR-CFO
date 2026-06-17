@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your CFO - Reports</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">Your <span>CFO</span></div>
+
+      <nav class="nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a class="primary-link" href="afford.html">Can I afford this?</a>
+        <a href="expenses.html">Daily Expenses</a>
+        <a href="bills.html">Fixed Bills</a>
+        <a href="envelopes.html">Budget Envelopes</a>
+        <a href="goals.html">Goals</a>
+        <a class="active" href="reports.html">Reports</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>Reports</h1>
+          <p>Choose a period, then ask Your CFO what happened with your money.</p>
+        </div>
+
+        <div class="badge">Ask Your CFO</div>
+      </header>
+
+      <section class="card">
+        <h2 class="section-title">Choose Timing</h2>
+
+        <div class="form-group">
+          <label>Report period</label>
+          <select id="period">
+            <option value="this_week">This week</option>
+            <option value="this_month" selected>This month</option>
+            <option value="last_3_months">Last 3 months</option>
+            <option value="last_4_months">Last 4 months</option>
+          </select>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" onclick="showStandardReport()">Generate Report</button>
+<button class="btn btn-primary" onclick="askDiagnosis()">
+  CFO Diagnosis
+</button>          <button class="btn" onclick="askCouldHaveSaved()">How much could I have saved?</button>
+          <button class="btn" onclick="askWhereLostMoney()">Where did I lose money?</button>
+          <button class="btn" onclick="askWhatReduce()">What should I reduce?</button>
+          <button class="btn btn-blue" onclick="askSpendingFast()">Am I spending too fast?</button>
+        </div>
+      </section>
+
+      <section class="section grid cards-4">
+        <div class="card">
+          <div class="card-title">Estimated Income</div>
+          <div id="reportIncome" class="card-value">0 MAD</div>
+          <div class="card-sub">For selected period</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Transactions</div>
+          <div id="reportTransactions" class="card-value">0 MAD</div>
+          <div class="card-sub">Daily spending</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Fixed Bills Pro-Rata</div>
+          <div id="reportBills" class="card-value">0 MAD</div>
+          <div class="card-sub">Distributed over period</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Real Savings</div>
+          <div id="reportSavings" class="card-value">0 MAD</div>
+          <div class="card-sub">Income minus expenses</div>
+        </div>
+      </section>
+
+      <section class="card verdict section">
+        <h2 id="answerTitle">CFO Answer</h2>
+        <p id="answerText">Choose a period and click one of the Ask Your CFO buttons.</p>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Details</h2>
+        <div id="detailsList" class="list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/models.js"></script>
+<script src="js/thresholds.js"></script>
+<script src="js/storage.js"></script>
+
+<script src="js/engines/incomeEngine.js"></script>
+<script src="js/engines/expenseEngine.js"></script>
+<script src="js/engines/budgetEngine.js"></script>
+<script src="js/engines/financialHealthEngine.js"></script>
+<script src="js/engines/recommendationEngine.js"></script>
+
+<script src="js/cfo-engine.js"></script>
+
+<script src="js/engines/reportEngine.js"></script>
+<script src="js/engines/savingOpportunityEngine.js"></script>
+<script src="js/engines/diagnosisEngine.js"></script>
+
+<script src="js/pages/reports.js"></script>
+</body>
+</html>

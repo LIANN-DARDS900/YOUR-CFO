@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your CFO - Fixed Bills</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">Your <span>CFO</span></div>
+
+      <nav class="nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a class="primary-link" href="afford.html">Can I afford this?</a>
+        <a href="expenses.html">Daily Expenses</a>
+        <a class="active" href="bills.html">Fixed Bills</a>
+        <a href="envelopes.html">Budget Envelopes</a>
+        <a href="goals.html">Goals</a>
+        <a href="reports.html">Reports</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>Fixed Bills</h1>
+          <p>Manage real recurring payments that must be paid every month.</p>
+        </div>
+
+        <div class="badge">Real Commitments</div>
+      </header>
+
+      <section class="grid cards-2">
+        <div class="card">
+          <h2 class="section-title">Add Fixed Bill</h2>
+
+          <form id="billForm">
+            <div class="form-group">
+              <label>Bill name</label>
+              <input id="name" type="text" placeholder="Rent, Netflix, Phone plan..." required />
+            </div>
+
+            <div class="form-group">
+              <label>Amount</label>
+              <input id="amount" type="number" placeholder="2500" min="0" step="0.01" required />
+            </div>
+
+            <div class="form-group">
+              <label>Category</label>
+              <select id="category">
+                <option>Housing</option>
+                <option>Internet</option>
+                <option>Phone</option>
+                <option>Subscriptions</option>
+                <option>Insurance</option>
+                <option>Transport</option>
+                <option>Education</option>
+                <option>Health</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Frequency</label>
+              <select id="frequency">
+                <option value="monthly">Monthly</option>
+                <option value="weekly">Weekly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Due day of month</label>
+              <input id="dueDay" type="number" min="1" max="31" value="1" />
+            </div>
+
+            <button class="btn btn-primary" type="submit">Save Fixed Bill</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Fixed Bills Summary</h2>
+
+          <div class="grid">
+            <div>
+              <div class="card-title">Monthly Fixed Bills</div>
+              <div id="fixedTotal" class="card-value">0 MAD</div>
+            </div>
+
+            <div>
+              <div class="card-title">Number of Bills</div>
+              <div id="billCount" class="card-value">0</div>
+            </div>
+
+            <div>
+              <div class="card-title">CFO Note</div>
+              <div id="billNote" class="card-sub">Add your fixed bills to calculate safe-to-spend.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Your Fixed Bills</h2>
+        <div id="billsList" class="list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/models.js"></script>
+  <script src="js/thresholds.js"></script>
+  <script src="js/storage.js"></script>
+
+  <script src="js/engines/budgetEngine.js"></script>
+
+  <script src="js/pages/bills.js"></script>
+</body>
+</html>

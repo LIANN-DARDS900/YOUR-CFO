@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your CFO - Goals</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">Your <span>CFO</span></div>
+
+      <nav class="nav">
+        <a href="dashboard.html">Dashboard</a>
+        <a class="primary-link" href="afford.html">Can I afford this?</a>
+        <a href="expenses.html">Daily Expenses</a>
+        <a href="bills.html">Fixed Bills</a>
+        <a href="envelopes.html">Budget Envelopes</a>
+        <a class="active" href="goals.html">Goals</a>
+        <a href="reports.html">Reports</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>Goals</h1>
+          <p>Turn expensive purchases into safe saving plans.</p>
+        </div>
+
+        <div class="badge">Saving Plans</div>
+      </header>
+
+      <section class="grid cards-2">
+        <div class="card">
+          <h2 class="section-title">Create Goal</h2>
+
+          <form id="goalForm">
+            <div class="form-group">
+              <label>Goal name</label>
+              <input id="title" type="text" placeholder="Buy laptop, iPhone, emergency fund..." required />
+            </div>
+
+            <div class="form-group">
+              <label>Target amount</label>
+              <input id="targetAmount" type="number" placeholder="10000" min="0" step="0.01" required />
+            </div>
+
+            <div class="form-group">
+              <label>Current saved</label>
+              <input id="currentAmount" type="number" placeholder="2000" min="0" step="0.01" value="0" />
+            </div>
+
+            <div class="form-group">
+              <label>Monthly contribution</label>
+              <input id="monthlyContribution" type="number" placeholder="1000" min="0" step="0.01" required />
+            </div>
+
+            <div class="form-group">
+              <label>Priority</label>
+              <select id="priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Save Goal</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Goals Summary</h2>
+
+          <div class="grid">
+            <div>
+              <div class="card-title">Active Goals</div>
+              <div id="activeGoals" class="card-value">0</div>
+            </div>
+
+            <div>
+              <div class="card-title">Total Target</div>
+              <div id="totalTarget" class="card-value">0 MAD</div>
+            </div>
+
+            <div>
+              <div class="card-title">Already Saved</div>
+              <div id="totalSaved" class="card-value">0 MAD</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 class="section-title">Your Goals</h2>
+        <div id="goalsList" class="list"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/models.js"></script>
+  <script src="js/storage.js"></script>
+<script src="js/engines/goalEngine.js"></script>
+
+  <script src="js/pages/goals.js"></script>
+</body>
+</html>

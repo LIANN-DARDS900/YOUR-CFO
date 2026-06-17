@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your CFO - Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">Your <span>CFO</span></div>
+
+      <nav class="nav">
+        <a class="active" href="dashboard.html">Dashboard</a>
+        <a class="primary-link" href="afford.html">Can I afford this?</a>
+        <a href="expenses.html">Daily Expenses</a>
+        <a href="bills.html">Fixed Bills</a>
+        <a href="envelopes.html">Budget Envelopes</a>
+        <a href="goals.html">Goals</a>
+        <a href="reports.html">Reports</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1 id="welcomeTitle">Dashboard</h1>
+          <p>Here is your financial situation this month.</p>
+        </div>
+
+        <div id="profileBadge" class="badge">Loading...</div>
+      </header>
+      <section class="section">
+  <div class="card" style="border:2px solid #111827;">
+    <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;">
+      <div>
+        <div id="briefingStatusBadge" class="badge">CFO Briefing</div>
+
+        <h2 id="briefingTitle" style="font-size:30px;margin:16px 0 8px;">
+          Loading CFO briefing...
+        </h2>
+
+        <p id="briefingMessage" style="color:#4b5563;font-size:16px;line-height:1.7;margin:0;">
+          Your CFO is analyzing your situation.
+        </p>
+      </div>
+
+      <div style="text-align:right;">
+        <small style="color:#6b7280;">Today’s max spending</small>
+        <div id="todayLimit" style="font-size:34px;font-weight:900;color:#111827;">
+          0 MAD
+        </div>
+      </div>
+    </div>
+
+    <div class="grid cards-3" style="margin-top:24px;">
+      <div class="mini-card">
+        <small>Biggest Leak</small>
+        <strong id="biggestLeak">-</strong>
+      </div>
+
+      <div class="mini-card">
+        <small>Goal Risk</small>
+        <strong id="goalRisk">-</strong>
+      </div>
+
+      <div class="mini-card">
+        <small>Safe To Spend</small>
+        <strong id="briefingSafeToSpend">-</strong>
+      </div>
+    </div>
+
+    <div style="margin-top:24px;">
+      <h3 style="margin-bottom:12px;">Next CFO Actions</h3>
+      <div id="nextActions" class="list"></div>
+    </div>
+  </div>
+</section>
+
+      <section class="grid cards-4">
+        <div class="card">
+          <div class="card-title">Monthly Income</div>
+          <div id="monthlyIncome" class="card-value">0 MAD</div>
+          <div class="card-sub">Safe monthly baseline</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Fixed Bills</div>
+          <div id="fixedBills" class="card-value">0 MAD</div>
+          <div class="card-sub">Real monthly commitments</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Daily Spending</div>
+          <div id="dailySpending" class="card-value">0 MAD</div>
+          <div class="card-sub">Transactions this month</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Safe To Spend</div>
+          <div id="safeToSpend" class="card-value">0 MAD</div>
+          <div class="card-sub">After bills, buffer and goals</div>
+        </div>
+      </section>
+
+      <section class="card verdict" id="verdictCard">
+        <h2 id="verdictTitle">CFO Verdict</h2>
+        <p id="verdictMessage">Loading analysis...</p>
+      </section>
+
+      <section class="section grid cards-2">
+        <div class="card">
+          <div class="card-title">Financial Health</div>
+          <div id="healthScore" class="card-value">--</div>
+          <div id="healthStatus" class="card-sub">Not enough data yet</div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">Budget Envelopes</div>
+          <div id="envelopeTotal" class="card-value">0 MAD</div>
+          <div class="card-sub">Planned flexible budgets</div>
+        </div>
+      </section>
+
+    <section class="section">
+  <h2 class="section-title">Ask Your CFO</h2>
+  <section class="section">
+  <h2 class="section-title">Data Tools</h2>
+
+  <div class="card">
+    <p style="color:#6b7280;margin-top:0;">
+      Use these tools while testing Your CFO locally.
+    </p>
+
+    <div class="actions">
+      <button class="btn btn-primary" onclick="loadDemoData()">Load Demo Data</button>
+      <button class="btn btn-blue" onclick="exportData()">Export Data</button>
+      <button class="btn" onclick="document.getElementById('importFile').click()">Import Data</button>
+      <button class="btn btn-danger" onclick="resetData()">Reset Data</button>
+    </div>
+
+    <input id="importFile" type="file" accept=".json" style="display:none;" />
+  </div>
+</section>
+
+  <div class="actions">
+    <button class="btn btn-primary" onclick="location.href='reports.html?action=saved&period=this_month'">
+      How much could I have saved?
+    </button>
+
+    <button class="btn" onclick="location.href='reports.html?action=lost&period=this_month'">
+      Where did I lose money?
+    </button>
+
+    <button class="btn" onclick="location.href='reports.html?action=reduce&period=this_month'">
+      What should I reduce?
+    </button>
+
+    <button class="btn btn-blue" onclick="location.href='afford.html'">
+      Can I afford this?
+    </button>
+  </div>
+</section>
+
+      <section class="section">
+        <h2 class="section-title">Recent Transactions</h2>
+        <div id="recentTransactions" class="list"></div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Core -->
+  <script src="js/models.js"></script>
+  <script src="js/thresholds.js"></script>
+  <script src="js/storage.js"></script>
+
+  <!-- Engines -->
+  <script src="js/engines/incomeEngine.js"></script>
+  <script src="js/engines/expenseEngine.js"></script>
+  <script src="js/engines/budgetEngine.js"></script>
+  <script src="js/engines/financialHealthEngine.js"></script>
+  <script src="js/engines/recommendationEngine.js"></script>
+
+  <!-- Main Engine -->
+  <script src="js/cfo-engine.js"></script>
+<script src="js/engines/briefingEngine.js"></script>
+  <!-- Page -->
+  <script src="js/pages/dashboard.js"></script>
+  
+</body>
+</html>

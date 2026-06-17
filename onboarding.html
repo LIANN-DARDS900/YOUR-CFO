@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your CFO - Onboarding</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">Your <span>CFO</span></div>
+
+      <nav class="nav">
+        <a class="active" href="onboarding.html">Onboarding</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a class="primary-link" href="afford.html">Can I afford this?</a>
+        <a href="expenses.html">Daily Expenses</a>
+        <a href="bills.html">Fixed Bills</a>
+        <a href="envelopes.html">Budget Envelopes</a>
+        <a href="goals.html">Goals</a>
+        <a href="reports.html">Reports</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div>
+          <h1>Build Your CFO Profile</h1>
+          <p>Your CFO needs to understand your financial situation before giving advice.</p>
+        </div>
+
+        <div class="badge">First Setup</div>
+      </header>
+
+      <section class="grid cards-2">
+        <div class="card">
+          <h2 class="section-title">Financial Profile</h2>
+
+          <form id="profileForm">
+            <div class="form-group">
+              <label>Your name</label>
+              <input id="name" type="text" placeholder="Ilyas" required />
+            </div>
+
+            <div class="form-group">
+              <label>What best describes you?</label>
+              <select id="userType">
+                <option value="student">Student</option>
+                <option value="employee" selected>Employee</option>
+                <option value="freelancer">Freelancer</option>
+                <option value="young_professional">Young Professional</option>
+                <option value="business_owner">Business Owner</option>
+                <option value="no_income">No Income</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Income type</label>
+              <select id="incomeType">
+                <option value="monthly" selected>Monthly income</option>
+                <option value="fixed">Fixed income</option>
+                <option value="weekly">Weekly income</option>
+                <option value="daily">Daily income</option>
+                <option value="irregular">Irregular income</option>
+                <option value="family_support">Family support</option>
+                <option value="none">No income right now</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Income amount</label>
+              <input id="baseIncomeAmount" type="number" placeholder="8000" min="0" step="0.01" />
+            </div>
+
+            <div class="form-group">
+              <label>Currency</label>
+              <select id="currency">
+                <option value="MAD" selected>MAD</option>
+                <option value="EUR">EUR</option>
+                <option value="USD">USD</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Risk tolerance</label>
+              <select id="riskTolerance">
+                <option value="low">Low — very careful</option>
+                <option value="medium" selected>Medium — balanced</option>
+                <option value="high">High — flexible</option>
+              </select>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Save Profile</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h2 class="section-title">Why this matters</h2>
+
+          <p style="color:#6b7280;line-height:1.7;">
+            Your CFO does not give the same advice to every user.
+            A student, employee, freelancer, and business owner need different financial logic.
+          </p>
+
+          <div class="list" style="margin-top:18px;">
+            <div class="list-item">
+              <div>
+                <strong>Employee Mode</strong><br>
+                <small>Stable salary, monthly planning, savings rate.</small>
+              </div>
+            </div>
+
+            <div class="list-item">
+              <div>
+                <strong>Freelancer Mode</strong><br>
+                <small>Irregular income, stronger safety buffer.</small>
+              </div>
+            </div>
+
+            <div class="list-item">
+              <div>
+                <strong>Student / No Income Mode</strong><br>
+                <small>Spending control instead of salary-based scoring.</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/models.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/pages/onboarding.js"></script>
+</body>
+</html>

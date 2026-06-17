@@ -1,0 +1,317 @@
+/* css/style.css */
+
+:root {
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --text: #111827;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --green: #22c55e;
+  --blue: #2563eb;
+  --orange: #f59e0b;
+  --red: #ef4444;
+  --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+
+.sidebar {
+  width: 260px;
+  background: #ffffff;
+  border-right: 1px solid var(--border);
+  padding: 24px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 800;
+  margin-bottom: 32px;
+}
+
+.logo span {
+  color: var(--green);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.nav a {
+  padding: 12px 14px;
+  border-radius: 12px;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.nav a.active,
+.nav a:hover {
+  background: #f0fdf4;
+  color: #15803d;
+}
+
+.nav .primary-link {
+  background: var(--green);
+  color: white;
+  margin: 8px 0;
+}
+
+.nav .primary-link:hover {
+  background: #16a34a;
+  color: white;
+}
+
+/* Main */
+
+.main {
+  margin-left: 260px;
+  padding: 32px;
+  width: calc(100% - 260px);
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 28px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 30px;
+}
+
+.topbar p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.badge {
+  background: #eef2ff;
+  color: #3730a3;
+  padding: 10px 14px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+/* Cards */
+
+.grid {
+  display: grid;
+  gap: 18px;
+}
+
+.cards-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.cards-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+}
+
+.card-title {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.card-value {
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.card-sub {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.verdict {
+  margin-top: 20px;
+  border-left: 6px solid var(--green);
+}
+
+.verdict h2 {
+  margin: 0 0 10px;
+  font-size: 22px;
+}
+
+.verdict p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Sections */
+
+.section {
+  margin-top: 24px;
+}
+
+.section-title {
+  margin: 0 0 14px;
+  font-size: 20px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: #ffffff;
+}
+
+.list-item small {
+  color: var(--muted);
+}
+
+/* Buttons */
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-weight: 800;
+  cursor: pointer;
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.btn-primary {
+  background: var(--green);
+  color: white;
+}
+
+.btn-blue {
+  background: var(--blue);
+  color: white;
+}
+
+.btn-danger {
+  background: var(--red);
+  color: white;
+}
+
+/* Health */
+
+.health-strong {
+  color: var(--green);
+}
+
+.health-stable {
+  color: var(--blue);
+}
+
+.health-warning {
+  color: var(--orange);
+}
+
+.health-risky {
+  color: var(--red);
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+    padding: 20px;
+  }
+
+  .cards-4,
+  .cards-2 {
+    grid-template-columns: 1fr;
+  }
+
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 12px;
+  }
+  /* Forms */
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  color: var(--text);
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 15px;
+  outline: none;
+  background: white;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--green);
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.12);
+}
+}
