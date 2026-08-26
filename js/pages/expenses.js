@@ -79,35 +79,47 @@ function renderTransactions() {
 
   container.innerHTML = transactions.map(tx => {
     const envelopeName = getEnvelopeName(tx.envelopeId);
-    const hasCreep = tx.systemFlags && tx.systemFlags.includes("lifestyle_creep");
-const overLimit = tx.systemFlags && tx.systemFlags.includes("over_daily_limit");
-const budgetPressure = tx.systemFlags && (
-  tx.systemFlags.includes("budget_pressure") ||
-  tx.systemFlags.includes("turns_budget_negative")
-);
+    const flags = tx.systemFlags || [];
+    const hasCreep = flags.includes("lifestyle_creep");
+    const overLimit = flags.includes("over_daily_limit");
+    const noProfile = flags.includes("no_profile");
+    const noIncomeLifestyle = flags.includes("no_income_lifestyle");
+    const budgetPressure = (
+      flags.includes("budget_pressure") ||
+      flags.includes("turns_budget_negative")
+    );
+
     return `
       <div class="list-item">
         <div>
-          <strong>${tx.label}</strong>
-          ${hasCreep ? `<span style="color:#${hasCreep ? `<span style="color:#ef4444;font-weight:800;"> • Cost of Life Alert</span>` : ""}
-${overLimit ? `<span style="color:#f59e0b;font-weight:800;"> • Over Daily Limit</span>` : ""}
-${budgetPressure ? `<span style="color:#dc2626;font-weight:800;"> • Budget Pressure</span>` : ""}ef4444;font-weight:800;"> • Cost of Life Alert</span>` : ""}
+          <strong>${CFO_escapeHTML(tx.label)}</strong>
+          ${hasCreep ? `<span class="transaction-flag flag-danger">Cost of Life Alert</span>` : ""}
+          ${overLimit ? `<span class="transaction-flag flag-warning">Over Daily Limit</span>` : ""}
+          ${budgetPressure ? `<span class="transaction-flag flag-danger">Budget Pressure</span>` : ""}
+          ${noProfile ? `<span class="transaction-flag flag-warning">Profile Needed</span>` : ""}
+          ${noIncomeLifestyle ? `<span class="transaction-flag flag-danger">No-Income Lifestyle Risk</span>` : ""}
           <br>
           <small>
-            ${tx.category} • ${tx.intent} • Qty: ${tx.quantity} • ${tx.date}
-            ${envelopeName ? `• Envelope: ${envelopeName}` : ""}
+            ${CFO_escapeHTML(tx.category)} • ${CFO_escapeHTML(tx.intent)} • Qty: ${CFO_escapeHTML(tx.quantity)} • ${CFO_escapeHTML(tx.date)}
+            ${envelopeName ? `• Envelope: ${CFO_escapeHTML(envelopeName)}` : ""}
           </small>
         </div>
 
         <div style="display:flex;align-items:center;gap:12px;">
           <strong>${formatMAD(tx.amount)}</strong>
-          <button class="btn btn-danger" onclick="deleteTransaction('${tx.id}')">
+          <button class="btn btn-danger" data-transaction-id="${CFO_escapeHTML(tx.id)}">
             Delete
           </button>
         </div>
       </div>
     `;
   }).join("");
+
+  container.querySelectorAll("[data-transaction-id]").forEach(button => {
+    button.addEventListener("click", () => {
+      deleteTransaction(button.dataset.transactionId);
+    });
+  });
 }
 
 function deleteTransaction(id) {

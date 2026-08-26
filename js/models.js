@@ -64,3 +64,17 @@ function CFO_today() {
 function CFO_clamp(value, min, max) {
   return Math.max(min, Math.min(max, value));
 }
+
+function CFO_escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>'"]/g, character => {
+    const entities = {
+      "&": "&amp;",
+      "<": "&lt;",
+      ">": "&gt;",
+      "'": "&#39;",
+      "\"": "&quot;"
+    };
+
+    return entities[character];
+  });
+}

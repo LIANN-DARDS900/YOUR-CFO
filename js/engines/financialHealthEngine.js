@@ -17,7 +17,11 @@ const FinancialHealthEngine = {
     const income = Number(incomeAnalysis.safeMonthlyIncome || 0);
     const fixedTotal = Number(budgetAnalysis.fixedTotal || 0);
     const transactions = Number(expenseAnalysis.totalMonthlyTransactions || 0);
-    const goalContributions = Number(budgetAnalysis.goalContributions || 0);
+    const goalContributions = Number(
+      budgetAnalysis.plannedGoalContributions ||
+      budgetAnalysis.goalContributions ||
+      0
+    );
     const emergencyBuffer = Number(budgetAnalysis.emergencyBuffer || 0);
     const safeToSpend = Number(budgetAnalysis.safeToSpend || 0);
 
@@ -62,9 +66,11 @@ const FinancialHealthEngine = {
 
     let status = "Risky";
 
-    if (score >= 81 && safeToSpend > 0) {
+    const hasHealthyMargin = safeToSpend >= income * 0.1;
+
+    if (score >= 81 && hasHealthyMargin) {
       status = "Strong";
-    } else if (score >= 61 && safeToSpend >= 0) {
+    } else if (score >= 61 && hasHealthyMargin) {
       status = "Stable";
     } else if (score >= 41) {
       status = "Needs Control";

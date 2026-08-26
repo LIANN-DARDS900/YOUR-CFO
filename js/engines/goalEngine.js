@@ -3,7 +3,7 @@
 
 const GoalEngine = {
   getActiveGoals(goals = []) {
-    return goals.filter(goal => goal.status === "active");
+    return goals.filter(goal => !goal.status || goal.status === "active");
   },
 
   calculateGoalProgress(goal) {

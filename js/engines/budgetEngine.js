@@ -29,6 +29,22 @@ const BudgetEngine = {
       .reduce((sum, env) => sum + Number(env.allocatedAmount || 0), 0);
   },
 
+  calculateTodayLimit(safeToSpend, referenceDate = new Date()) {
+    const safeAmount = Number(safeToSpend || 0);
+
+    if (safeAmount <= 0) return 0;
+
+    const day = referenceDate.getDate();
+    const daysInMonth = new Date(
+      referenceDate.getFullYear(),
+      referenceDate.getMonth() + 1,
+      0
+    ).getDate();
+    const remainingDays = Math.max(1, daysInMonth - day + 1);
+
+    return Math.floor(safeAmount / remainingDays);
+  },
+
   calculateEnvelopeUsage(envelopes = [], transactions = []) {
     return envelopes.map(env => {
       const used = transactions
@@ -64,12 +80,18 @@ const BudgetEngine = {
       .reduce((sum, bill) => sum + Number(bill.amount || 0), 0);
   },
 
-  calculateSafeToSpend({ safeMonthlyIncome, fixedBills, transactions, goals, profile }) {
+  calculateSafeToSpend({
+    safeMonthlyIncome,
+    fixedBills = [],
+    transactions = [],
+    goals = [],
+    profile
+  }) {
     const fixedTotal = this.calculateFixedBillsTotal(fixedBills);
     const monthlyTransactions = ExpenseEngine.analyze(transactions).totalMonthlyTransactions;
 
     const plannedGoalContributions = goals
-      .filter(goal => goal.status === "active")
+      .filter(goal => !goal.status || goal.status === "active")
       .reduce((sum, goal) => sum + Number(goal.monthlyContribution || 0), 0);
 
     const thresholds = CFO_getThresholds(profile?.userType || "employee");

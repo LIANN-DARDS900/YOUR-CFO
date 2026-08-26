@@ -11,6 +11,13 @@ const RecommendationEngine = {
     }
 
     if (incomeAnalysis.isNoIncome) {
+      if (budgetAnalysis.safeToSpend < 0) {
+        return {
+          title: "Spending Control Mode — Budget pressure",
+          message: `No stable income is available and your safe-to-spend is negative (${budgetAnalysis.safeToSpend} MAD). Protect cash for essential needs and avoid lifestyle spending.`
+        };
+      }
+
       return {
         title: "Spending Control Mode",
         message: "You currently have no stable income. Track expenses carefully and avoid lifestyle spending."

@@ -25,38 +25,55 @@
     <main class="main">
       <header class="topbar">
         <div>
-          <h1>Reports</h1>
-          <p>Choose a period, then ask Your CFO what happened with your money.</p>
+          <h1>CFO Diagnosis</h1>
+          <p>Understand what happened, why it matters, and what to do next.</p>
         </div>
 
-        <div class="badge">Ask Your CFO</div>
+        <div class="badge">Decision Report</div>
       </header>
 
-      <section class="card">
-        <h2 class="section-title">Choose Timing</h2>
+      <section class="card report-controls">
+        <div class="report-period-control">
+          <div>
+            <span class="eyebrow">Diagnosis period</span>
+            <h2 class="section-title">Choose timing</h2>
+          </div>
 
-        <div class="form-group">
-          <label>Report period</label>
-          <select id="period">
-            <option value="this_week">This week</option>
-            <option value="this_month" selected>This month</option>
-            <option value="last_3_months">Last 3 months</option>
-            <option value="last_4_months">Last 4 months</option>
-          </select>
+          <div class="form-group compact-form-group">
+            <label for="period">Report period</label>
+            <select id="period">
+              <option value="this_week">This week</option>
+              <option value="this_month" selected>This month</option>
+              <option value="last_3_months">Last 3 months</option>
+              <option value="last_4_months">Last 4 months</option>
+            </select>
+          </div>
         </div>
 
-        <div class="actions">
-          <button class="btn btn-primary" onclick="showStandardReport()">Generate Report</button>
-<button class="btn btn-primary" onclick="askDiagnosis()">
-  CFO Diagnosis
-</button>          <button class="btn" onclick="askCouldHaveSaved()">How much could I have saved?</button>
+        <div class="actions report-commands">
+          <button class="btn btn-blue" onclick="askDiagnosis()">CFO Diagnosis</button>
+          <button class="btn" onclick="askCouldHaveSaved()">How much could I have saved?</button>
           <button class="btn" onclick="askWhereLostMoney()">Where did I lose money?</button>
           <button class="btn" onclick="askWhatReduce()">What should I reduce?</button>
-          <button class="btn btn-blue" onclick="askSpendingFast()">Am I spending too fast?</button>
+          <button class="btn" onclick="askSpendingFast()">Am I spending too fast?</button>
+          <button class="btn btn-quiet" onclick="showStandardReport()">Standard report</button>
         </div>
       </section>
 
-      <section class="section grid cards-4">
+      <section id="answerCard" class="card verdict diagnosis-card section" aria-live="polite">
+        <h2 id="answerTitle">CFO Diagnosis</h2>
+        <div id="answerText" class="diagnosis-answer" aria-busy="true"></div>
+      </section>
+
+      <section class="section" aria-labelledby="reportNumbersTitle">
+        <div class="section-heading compact-heading">
+          <div>
+            <span class="eyebrow">Supporting numbers</span>
+            <h2 id="reportNumbersTitle" class="section-title">Period at a glance</h2>
+          </div>
+        </div>
+
+        <div class="grid cards-4">
         <div class="card">
           <div class="card-title">Estimated Income</div>
           <div id="reportIncome" class="card-value">0 MAD</div>
@@ -80,11 +97,7 @@
           <div id="reportSavings" class="card-value">0 MAD</div>
           <div class="card-sub">Income minus expenses</div>
         </div>
-      </section>
-
-      <section class="card verdict section">
-        <h2 id="answerTitle">CFO Answer</h2>
-        <p id="answerText">Choose a period and click one of the Ask Your CFO buttons.</p>
+        </div>
       </section>
 
       <section class="section">
@@ -95,21 +108,21 @@
   </div>
 
   <script src="js/models.js"></script>
-<script src="js/thresholds.js"></script>
-<script src="js/storage.js"></script>
+  <script src="js/thresholds.js"></script>
+  <script src="js/storage.js"></script>
 
-<script src="js/engines/incomeEngine.js"></script>
-<script src="js/engines/expenseEngine.js"></script>
-<script src="js/engines/budgetEngine.js"></script>
-<script src="js/engines/financialHealthEngine.js"></script>
-<script src="js/engines/recommendationEngine.js"></script>
+  <script src="js/engines/incomeEngine.js"></script>
+  <script src="js/engines/expenseEngine.js"></script>
+  <script src="js/engines/budgetEngine.js"></script>
+  <script src="js/engines/financialHealthEngine.js"></script>
+  <script src="js/engines/recommendationEngine.js"></script>
 
-<script src="js/cfo-engine.js"></script>
+  <script src="js/cfo-engine.js"></script>
 
-<script src="js/engines/reportEngine.js"></script>
-<script src="js/engines/savingOpportunityEngine.js"></script>
-<script src="js/engines/diagnosisEngine.js"></script>
+  <script src="js/engines/reportEngine.js"></script>
+  <script src="js/engines/savingOpportunityEngine.js"></script>
+  <script src="js/engines/diagnosisEngine.js"></script>
 
-<script src="js/pages/reports.js"></script>
+  <script src="js/pages/reports.js"></script>
 </body>
 </html>

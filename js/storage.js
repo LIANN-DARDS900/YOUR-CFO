@@ -11,21 +11,56 @@ const CFO_DEFAULT_DATA = {
   goals: []
 };
 
+function CFO_createDefaultData() {
+  return {
+    profile: null,
+    incomeEntries: [],
+    fixedBills: [],
+    budgetEnvelopes: [],
+    transactions: [],
+    goals: []
+  };
+}
+
 const CFOStorage = {
   load() {
     const raw = localStorage.getItem(CFO_STORAGE_KEY);
 
     if (!raw) {
       this.save(CFO_DEFAULT_DATA);
-      return structuredClone(CFO_DEFAULT_DATA);
+      return CFO_createDefaultData();
     }
 
     try {
-      return JSON.parse(raw);
+      const parsed = JSON.parse(raw);
+
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+        throw new Error("Invalid storage shape");
+      }
+
+      return {
+        ...CFO_createDefaultData(),
+        ...parsed,
+        incomeEntries: Array.isArray(parsed.incomeEntries)
+          ? parsed.incomeEntries
+          : [],
+        fixedBills: Array.isArray(parsed.fixedBills)
+          ? parsed.fixedBills
+          : [],
+        budgetEnvelopes: Array.isArray(parsed.budgetEnvelopes)
+          ? parsed.budgetEnvelopes
+          : [],
+        transactions: Array.isArray(parsed.transactions)
+          ? parsed.transactions
+          : [],
+        goals: Array.isArray(parsed.goals)
+          ? parsed.goals
+          : []
+      };
     } catch (error) {
       console.error("Storage parse error:", error);
       this.save(CFO_DEFAULT_DATA);
-      return structuredClone(CFO_DEFAULT_DATA);
+      return CFO_createDefaultData();
     }
   },
 

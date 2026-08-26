@@ -3,14 +3,7 @@
 
 const DecisionGuardEngine = {
   getTodayLimit(safeToSpend) {
-    const now = new Date();
-    const day = now.getDate();
-    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    const remainingDays = Math.max(1, daysInMonth - day + 1);
-
-    if (safeToSpend <= 0) return 0;
-
-    return Math.floor(safeToSpend / remainingDays);
+    return BudgetEngine.calculateTodayLimit(safeToSpend);
   },
 
   evaluateExpenseBeforeSave(transactionDraft, data) {
@@ -81,6 +74,18 @@ const DecisionGuardEngine = {
 
     if (amount > todayLimit && intent === "lifestyle") {
       flags.push("over_daily_limit");
+
+      if (safeAfter < 0) {
+        flags.push("turns_budget_negative");
+
+        return {
+          level: "danger",
+          title: "This expense breaks today’s limit and your monthly budget",
+          message: `Today's recommended max is ${todayLimit} MAD, and this expense would make safe-to-spend ${Math.round(safeAfter)} MAD. Your CFO recommends delaying it or reducing other spending first.`,
+          requiresConfirmation: true,
+          systemFlags: flags
+        };
+      }
 
       return {
         level: "warning",

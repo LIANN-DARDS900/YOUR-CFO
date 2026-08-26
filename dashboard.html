@@ -22,63 +22,114 @@
       </nav>
     </aside>
 
-    <main class="main">
+    <main class="main command-center">
       <header class="topbar">
         <div>
           <h1 id="welcomeTitle">Dashboard</h1>
-          <p>Here is your financial situation this month.</p>
+          <p>Your daily command center for safer financial decisions.</p>
         </div>
 
-        <div id="profileBadge" class="badge">Loading...</div>
+        <a id="profileBadge" class="badge" href="onboarding.html" title="Create or edit your financial profile">Loading...</a>
       </header>
-      <section class="section">
-  <div class="card" style="border:2px solid #111827;">
-    <div style="display:flex;justify-content:space-between;gap:16px;align-items:flex-start;flex-wrap:wrap;">
-      <div>
-        <div id="briefingStatusBadge" class="badge">CFO Briefing</div>
 
-        <h2 id="briefingTitle" style="font-size:30px;margin:16px 0 8px;">
-          Loading CFO briefing...
-        </h2>
+      <section class="section section-first" aria-labelledby="briefingTitle">
+        <div id="briefingCard" class="card cfo-briefing" data-status="loading">
+          <div class="briefing-header">
+            <span class="eyebrow">CFO Briefing</span>
+            <span id="briefingStatusBadge" class="status-pill">Analyzing</span>
+          </div>
 
-        <p id="briefingMessage" style="color:#4b5563;font-size:16px;line-height:1.7;margin:0;">
-          Your CFO is analyzing your situation.
-        </p>
-      </div>
+          <div class="briefing-decision-grid">
+            <div>
+              <div class="decision-label">Today’s decision</div>
+              <h2 id="briefingTitle">Loading CFO briefing...</h2>
+              <p id="briefingMessage" class="briefing-message">
+                Your CFO is analyzing your situation.
+              </p>
 
-      <div style="text-align:right;">
-        <small style="color:#6b7280;">Today’s max spending</small>
-        <div id="todayLimit" style="font-size:34px;font-weight:900;color:#111827;">
-          0 MAD
+              <div id="profileSetupAction" class="profile-setup-action" hidden>
+                <a class="btn btn-blue" href="onboarding.html">Create my financial profile</a>
+                <span>It only takes a minute and unlocks reliable CFO decisions.</span>
+              </div>
+            </div>
+
+            <div class="today-limit-card">
+              <small>Today’s max spending</small>
+              <strong id="todayLimit">0 MAD</strong>
+              <span>Based on your safe-to-spend and days left this month</span>
+            </div>
+          </div>
+
+          <div class="grid cards-3 briefing-signals">
+            <div class="mini-card">
+              <small>Biggest lifestyle leak</small>
+              <strong id="biggestLeak">-</strong>
+            </div>
+
+            <div id="goalRiskCard" class="mini-card">
+              <small>Goal risk</small>
+              <strong id="goalRisk">-</strong>
+            </div>
+
+            <div class="mini-card">
+              <small>CFO safe-to-spend</small>
+              <strong id="briefingSafeToSpend">-</strong>
+            </div>
+          </div>
+
+          <div class="briefing-actions">
+            <h3>Next CFO Actions</h3>
+            <div id="nextActions" class="list action-list"></div>
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
 
-    <div class="grid cards-3" style="margin-top:24px;">
-      <div class="mini-card">
-        <small>Biggest Leak</small>
-        <strong id="biggestLeak">-</strong>
-      </div>
+      <section class="section" aria-labelledby="commandsTitle">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">Decision tools</span>
+            <h2 id="commandsTitle" class="section-title">CFO Commands</h2>
+          </div>
+          <p>Ask a focused question and get an answer from your real financial data.</p>
+        </div>
 
-      <div class="mini-card">
-        <small>Goal Risk</small>
-        <strong id="goalRisk">-</strong>
-      </div>
+        <div class="command-grid">
+          <a class="command-card command-card-primary" href="reports.html?action=diagnosis&amp;period=this_month">
+            <span>CFO Diagnosis</span>
+            <small>Understand your position, risks, and next actions.</small>
+          </a>
 
-      <div class="mini-card">
-        <small>Safe To Spend</small>
-        <strong id="briefingSafeToSpend">-</strong>
-      </div>
-    </div>
+          <a class="command-card" href="afford.html">
+            <span>Can I afford this?</span>
+            <small>Check a purchase before committing.</small>
+          </a>
 
-    <div style="margin-top:24px;">
-      <h3 style="margin-bottom:12px;">Next CFO Actions</h3>
-      <div id="nextActions" class="list"></div>
-    </div>
-  </div>
-</section>
+          <a class="command-card" href="reports.html?action=saved&amp;period=this_month">
+            <span>How much could I have saved?</span>
+            <small>Measure your avoidable lifestyle spending.</small>
+          </a>
 
-      <section class="grid cards-4">
+          <a class="command-card" href="reports.html?action=lost&amp;period=this_month">
+            <span>Where did I lose money?</span>
+            <small>Find the categories creating the biggest leaks.</small>
+          </a>
+
+          <a class="command-card" href="reports.html?action=reduce&amp;period=this_month">
+            <span>What should I reduce?</span>
+            <small>Get a deterministic reduction plan.</small>
+          </a>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="numbersTitle">
+        <div class="section-heading compact-heading">
+          <div>
+            <span class="eyebrow">Supporting numbers</span>
+            <h2 id="numbersTitle" class="section-title">This month at a glance</h2>
+          </div>
+        </div>
+
+        <div class="grid cards-4">
         <div class="card">
           <div class="card-title">Monthly Income</div>
           <div id="monthlyIncome" class="card-value">0 MAD</div>
@@ -102,6 +153,7 @@
           <div id="safeToSpend" class="card-value">0 MAD</div>
           <div class="card-sub">After bills, buffer and goals</div>
         </div>
+        </div>
       </section>
 
       <section class="card verdict" id="verdictCard">
@@ -123,49 +175,34 @@
         </div>
       </section>
 
-    <section class="section">
-  <h2 class="section-title">Ask Your CFO</h2>
-  <section class="section">
-  <h2 class="section-title">Data Tools</h2>
-
-  <div class="card">
-    <p style="color:#6b7280;margin-top:0;">
-      Use these tools while testing Your CFO locally.
-    </p>
-
-    <div class="actions">
-      <button class="btn btn-primary" onclick="loadDemoData()">Load Demo Data</button>
-      <button class="btn btn-blue" onclick="exportData()">Export Data</button>
-      <button class="btn" onclick="document.getElementById('importFile').click()">Import Data</button>
-      <button class="btn btn-danger" onclick="resetData()">Reset Data</button>
-    </div>
-
-    <input id="importFile" type="file" accept=".json" style="display:none;" />
-  </div>
-</section>
-
-  <div class="actions">
-    <button class="btn btn-primary" onclick="location.href='reports.html?action=saved&period=this_month'">
-      How much could I have saved?
-    </button>
-
-    <button class="btn" onclick="location.href='reports.html?action=lost&period=this_month'">
-      Where did I lose money?
-    </button>
-
-    <button class="btn" onclick="location.href='reports.html?action=reduce&period=this_month'">
-      What should I reduce?
-    </button>
-
-    <button class="btn btn-blue" onclick="location.href='afford.html'">
-      Can I afford this?
-    </button>
-  </div>
-</section>
-
       <section class="section">
         <h2 class="section-title">Recent Transactions</h2>
         <div id="recentTransactions" class="list"></div>
+      </section>
+
+      <section class="section data-tools-section">
+        <details class="data-tools">
+          <summary>
+            <span>
+              <strong>Data Tools</strong>
+              <small>Demo, backup, import, and reset controls</small>
+            </span>
+            <span class="data-tools-toggle">Manage data</span>
+          </summary>
+
+          <div class="data-tools-content">
+            <p>Use these utilities while testing Your CFO locally.</p>
+
+            <div class="actions compact-actions">
+              <button class="btn btn-primary" onclick="loadDemoData()">Load Demo Data</button>
+              <button class="btn btn-blue" onclick="exportData()">Export Data</button>
+              <button class="btn" onclick="document.getElementById('importFile').click()">Import Data</button>
+              <button class="btn btn-danger" onclick="resetData()">Reset Data</button>
+            </div>
+
+            <input id="importFile" type="file" accept=".json" hidden />
+          </div>
+        </details>
       </section>
     </main>
   </div>
@@ -184,7 +221,8 @@
 
   <!-- Main Engine -->
   <script src="js/cfo-engine.js"></script>
-<script src="js/engines/briefingEngine.js"></script>
+  <script src="js/engines/savingOpportunityEngine.js"></script>
+  <script src="js/engines/briefingEngine.js"></script>
   <!-- Page -->
   <script src="js/pages/dashboard.js"></script>
   

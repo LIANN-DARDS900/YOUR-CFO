@@ -50,8 +50,8 @@ function renderRecentTransactions(transactions = []) {
     return `
       <div class="list-item">
         <div>
-          <strong>${tx.label}</strong><br>
-          <small>${tx.category} • ${tx.intent} • ${tx.date}</small>
+          <strong>${CFO_escapeHTML(tx.label)}</strong><br>
+          <small>${CFO_escapeHTML(tx.category)} • ${CFO_escapeHTML(tx.intent)} • ${CFO_escapeHTML(tx.date)}</small>
         </div>
         <strong>${formatMAD(tx.amount)}</strong>
       </div>
@@ -59,9 +59,7 @@ function renderRecentTransactions(transactions = []) {
   }).join("");
 }
 
-function renderDashboard() {
-  const analysis = CFOEngine.getDashboardAnalysis();
-
+function renderDashboard(analysis = CFOEngine.getDashboardAnalysis()) {
   const {
     data,
     incomeAnalysis,
@@ -90,15 +88,13 @@ function renderDashboard() {
   document.getElementById("dailySpending").textContent =
     formatMAD(expenseAnalysis.totalMonthlyTransactions);
 
-const safeToSpendEl = document.getElementById("safeToSpend");
+  const safeToSpendEl = document.getElementById("safeToSpend");
 
-safeToSpendEl.textContent = formatMAD(budgetAnalysis.safeToSpend);
-
-if (budgetAnalysis.safeToSpend < 0) {
-  safeToSpendEl.classList.add("health-risky");
-} else {
-  safeToSpendEl.classList.remove("health-risky");
-}
+  safeToSpendEl.textContent = formatMAD(budgetAnalysis.safeToSpend);
+  safeToSpendEl.classList.toggle(
+    "health-risky",
+    budgetAnalysis.safeToSpend < 0
+  );
 
   document.getElementById("envelopeTotal").textContent =
     formatMAD(budgetAnalysis.envelopeTotal);
@@ -108,6 +104,13 @@ if (budgetAnalysis.safeToSpend < 0) {
 
   document.getElementById("verdictMessage").textContent =
     recommendation.message;
+
+  const verdictCard = document.getElementById("verdictCard");
+  const verdictStatus = budgetAnalysis.safeToSpend < 0
+    ? "danger"
+    : healthAnalysis.status.toLowerCase().replaceAll(" ", "-");
+
+  verdictCard?.setAttribute("data-status", verdictStatus);
 
   const healthScore = document.getElementById("healthScore");
   const healthStatus = document.getElementById("healthStatus");
@@ -123,9 +126,11 @@ if (budgetAnalysis.safeToSpend < 0) {
 
   renderRecentTransactions(data.transactions);
 }
-function renderCFOBriefing() {
-  const briefing = BriefingEngine.generate();
 
+function renderCFOBriefing(analysis) {
+  const briefing = BriefingEngine.generate(analysis);
+
+  const briefingCard = document.getElementById("briefingCard");
   const statusBadge = document.getElementById("briefingStatusBadge");
   const title = document.getElementById("briefingTitle");
   const message = document.getElementById("briefingMessage");
@@ -134,31 +139,35 @@ function renderCFOBriefing() {
   const goalRisk = document.getElementById("goalRisk");
   const safeToSpend = document.getElementById("briefingSafeToSpend");
   const actions = document.getElementById("nextActions");
+  const goalRiskCard = document.getElementById("goalRiskCard");
+  const profileSetupAction = document.getElementById("profileSetupAction");
 
   if (!title) return;
 
-  statusBadge.textContent = `CFO Briefing • ${briefing.status.toUpperCase()}`;
+  if (profileSetupAction) {
+    profileSetupAction.hidden = Boolean(analysis?.data?.profile);
+  }
+
+  briefingCard?.setAttribute("data-status", briefing.status);
+  statusBadge.textContent = briefing.status.toUpperCase();
   title.textContent = briefing.title;
   message.textContent = briefing.message;
   todayLimit.textContent = formatMAD(briefing.todayLimit);
-  biggestLeak.textContent = `${briefing.leak.category} — ${formatMAD(briefing.leak.amount)}`;
+  biggestLeak.textContent = briefing.leak.amount > 0
+    ? `${briefing.leak.category} — ${formatMAD(briefing.leak.amount)}`
+    : briefing.leak.category;
   goalRisk.textContent = briefing.goalRisk.message;
+  goalRiskCard?.setAttribute("data-risk", briefing.goalRisk.level);
   safeToSpend.textContent = formatMAD(briefing.safeToSpend);
 
-  if (briefing.safeToSpend < 0) {
-    safeToSpend.classList.add("health-risky");
-    todayLimit.classList.add("health-risky");
-  } else {
-    safeToSpend.classList.remove("health-risky");
-    todayLimit.classList.remove("health-risky");
-  }
+  safeToSpend.classList.toggle("health-risky", briefing.safeToSpend < 0);
+  todayLimit.classList.toggle("health-risky", briefing.safeToSpend < 0);
 
-  actions.innerHTML = briefing.actions.map(action => {
+  actions.innerHTML = briefing.actions.map((action, index) => {
     return `
-      <div class="list-item">
-        <div>
-          <strong>${action}</strong>
-        </div>
+      <div class="list-item action-item">
+        <span class="action-number">${index + 1}</span>
+        <strong>${CFO_escapeHTML(action)}</strong>
       </div>
     `;
   }).join("");
@@ -283,9 +292,11 @@ function exportData() {
   const link = document.createElement("a");
   link.href = url;
   link.download = "your-cfo-data.json";
+  document.body.appendChild(link);
   link.click();
+  link.remove();
 
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 0);
 }
 
 function resetData() {
@@ -321,7 +332,17 @@ function setupImportData() {
           return;
         }
 
-        CFOStorage.save(importedData);
+        const compatibleData = {
+          ...importedData,
+          incomeEntries: Array.isArray(importedData.incomeEntries)
+            ? importedData.incomeEntries
+            : [],
+          goals: Array.isArray(importedData.goals)
+            ? importedData.goals
+            : []
+        };
+
+        CFOStorage.save(compatibleData);
         alert("Data imported successfully.");
         location.reload();
       } catch (error) {
@@ -334,8 +355,10 @@ function setupImportData() {
 }
 
 function initDashboardPage() {
-  renderDashboard();
-  renderCFOBriefing();
+  const analysis = CFOEngine.getDashboardAnalysis();
+
+  renderDashboard(analysis);
+  renderCFOBriefing(analysis);
   setupImportData();
 }
 

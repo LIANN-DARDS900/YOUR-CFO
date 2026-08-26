@@ -3,43 +3,35 @@
 
 const BriefingEngine = {
   getTodayLimit(budgetAnalysis) {
-    const now = new Date();
-    const day = now.getDate();
-    const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-    const remainingDays = Math.max(1, daysInMonth - day + 1);
-
-    const safeToSpend = Number(budgetAnalysis.safeToSpend || 0);
-
-    if (safeToSpend <= 0) return 0;
-
-    return Math.floor(safeToSpend / remainingDays);
+    return BudgetEngine.calculateTodayLimit(budgetAnalysis.safeToSpend);
   },
 
   getBiggestLeak(expenseAnalysis) {
-    const categories = expenseAnalysis.byCategory || {};
+    const leaks = SavingOpportunityEngine.findTopLeakCategories(
+      expenseAnalysis.monthTransactions || []
+    );
 
-    const sorted = Object.entries(categories)
-      .sort((a, b) => b[1] - a[1]);
-
-    if (sorted.length === 0) {
+    if (leaks.length === 0) {
       return {
-        category: "No leak detected",
+        category: "No lifestyle leak",
         amount: 0,
-        message: "No transactions yet. Start tracking daily expenses."
+        message: "No lifestyle spending leak detected this month."
       };
     }
 
-    const [category, amount] = sorted[0];
+    const topLeak = leaks[0];
 
     return {
-      category,
-      amount: Math.round(amount),
-      message: `${category} is your biggest spending area this month.`
+      category: topLeak.category,
+      amount: topLeak.amount,
+      message: `${topLeak.category} is your biggest lifestyle spending area this month.`
     };
   },
 
   getGoalRisk(data, budgetAnalysis) {
-    const activeGoals = (data.goals || []).filter(goal => goal.status === "active");
+    const activeGoals = (data.goals || []).filter(goal => {
+      return !goal.status || goal.status === "active";
+    });
 
     if (activeGoals.length === 0) {
       return {
@@ -54,7 +46,14 @@ const BriefingEngine = {
 
     const safeToSpend = Number(budgetAnalysis.safeToSpend || 0);
 
-    if (safeToSpend <= 0 && totalContribution > 0) {
+    if (totalContribution <= 0) {
+      return {
+        level: "high",
+        message: "Your active goals have no monthly contribution and are not progressing."
+      };
+    }
+
+    if (safeToSpend <= 0) {
       return {
         level: "high",
         message: "Your goals are creating pressure because safe-to-spend is already negative."
@@ -74,22 +73,37 @@ const BriefingEngine = {
     };
   },
 
-  getNextActions({ budgetAnalysis, expenseAnalysis, leak, goalRisk }) {
+  getNextActions({ data, incomeAnalysis, budgetAnalysis, expenseAnalysis, leak, goalRisk }) {
     const actions = [];
+    const lifestyle = expenseAnalysis.byIntent?.lifestyle || 0;
+    const essential = expenseAnalysis.byIntent?.essential || 0;
+
+    if (!data.profile) {
+      return [
+        "Complete your CFO profile to unlock a reliable daily spending decision.",
+        "Add your real fixed bills before using safe-to-spend."
+      ];
+    }
+
+    if (incomeAnalysis.isNoIncome && budgetAnalysis.safeToSpend >= 0) {
+      actions.push("Keep spending limited to essential needs while no stable income is available.");
+    }
 
     if (budgetAnalysis.safeToSpend < 0) {
       actions.push("Stop all non-essential purchases for the next 7 days.");
-      actions.push("Reduce lifestyle spending immediately until safe-to-spend becomes positive.");
-    } else {
+
+      if (lifestyle > 0) {
+        actions.push("Reduce lifestyle spending immediately until safe-to-spend becomes positive.");
+      } else {
+        actions.push("Keep essential spending as low as practical until safe-to-spend becomes positive.");
+      }
+    } else if (!incomeAnalysis.isNoIncome) {
       actions.push(`Keep today's spending under ${this.getTodayLimit(budgetAnalysis)} MAD.`);
     }
 
     if (leak.amount > 0) {
       actions.push(`Review ${leak.category} spending and reduce it this week.`);
     }
-
-    const lifestyle = expenseAnalysis.byIntent?.lifestyle || 0;
-    const essential = expenseAnalysis.byIntent?.essential || 0;
 
     if (lifestyle > essential) {
       actions.push("Lifestyle spending is higher than essential spending. Freeze unnecessary purchases.");
@@ -107,15 +121,16 @@ const BriefingEngine = {
     return actions.slice(0, 4);
   },
 
-  generate() {
-    const dashboard = CFOEngine.getDashboardAnalysis();
+  generate(analysis) {
+    const dashboard = analysis || CFOEngine.getDashboardAnalysis();
 
     const {
       data,
       incomeAnalysis,
       expenseAnalysis,
       budgetAnalysis,
-      healthAnalysis
+      healthAnalysis,
+      recommendation
     } = dashboard;
 
     const safeToSpend = Number(budgetAnalysis.safeToSpend || 0);
@@ -124,21 +139,25 @@ const BriefingEngine = {
     const goalRisk = this.getGoalRisk(data, budgetAnalysis);
 
     let status = "stable";
-    let title = "Your month is under control";
-    let message = "Your CFO sees a stable month. Keep spending controlled and protect your goals.";
+    let title = recommendation.title;
+    let message = recommendation.message;
 
     if (!data.profile) {
       status = "setup";
       title = "Create your CFO profile";
       message = "Your CFO needs your profile before giving financial decisions.";
     } else if (incomeAnalysis.isNoIncome) {
-      status = "control";
+      status = safeToSpend < 0 ? "danger" : "control";
       title = "Spending Control Mode";
-      message = "No stable income detected. Your priority is controlling expenses, not optimizing savings.";
+      message = safeToSpend < 0
+        ? `No stable income is available and your safe-to-spend is negative (${safeToSpend} MAD). Budget pressure is active, so focus on essential spending only.`
+        : "No stable income detected. Your priority is controlling expenses, not optimizing savings.";
     } else if (safeToSpend < 0) {
       status = "danger";
       title = "Budget pressure detected";
       message = `Your safe-to-spend is negative (${safeToSpend} MAD). Avoid new purchases and reduce spending now.`;
+    } else if (healthAnalysis.status === "Risky") {
+      status = "danger";
     } else if (safeToSpend < incomeAnalysis.safeMonthlyIncome * 0.1) {
       status = "warning";
       title = "Tight month";
@@ -147,9 +166,13 @@ const BriefingEngine = {
       status = "strong";
       title = "Strong financial position";
       message = "Your safe-to-spend is positive and your budget is healthy. Keep protecting your goals.";
+    } else if (healthAnalysis.status === "Needs Control") {
+      status = "warning";
     }
 
     const actions = this.getNextActions({
+      data,
+      incomeAnalysis,
       budgetAnalysis,
       expenseAnalysis,
       leak,
